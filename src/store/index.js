@@ -1,7 +1,9 @@
-import { createStore } from 'vuex'
+import Vue from 'vue'
+import Vuex from 'vuex'
 import AmazonCognitoVuexModule from 'amazon-cognito-vuex-module'
 
-export default createStore({
+Vue.use(Vuex)
+export default new Vuex.Store({
   state: {},
   mutations: {},
   actions: {},
@@ -9,7 +11,7 @@ export default createStore({
     cognito: new AmazonCognitoVuexModule({
       region: process.env.VUE_APP_AWS_REGION,
       userPoolId: process.env.VUE_APP_COGNITO_USER_POOL_ID,
-      clientId: process.env.VUE_APP_COGNITO_CLIENT_APP_ID
-    })
-  }
+      clientId: process.env.VUE_APP_COGNITO_CLIENT_APP_ID,
+    }),
+  },
 })
