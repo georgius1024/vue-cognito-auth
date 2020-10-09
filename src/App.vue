@@ -1,39 +1,21 @@
 <template>
-  <main>
-    <div id="nav">
-      <router-link :to="{ name: 'Home' }">Home</router-link>
-      |
-      <router-link :to="{ name: 'Signup' }">SignUp</router-link>
-      |
-      <router-link :to="{ name: 'Signin' }">Signin</router-link>
-      |
-      <router-link :to="{ name: 'Confirm' }">Confirm</router-link>
-      |
-      <router-link :to="{ name: 'Forgot' }">Forgot</router-link>
-    </div>
-    <router-view />
-  </main>
+  <v-app>
+    <AppBar />
+    <v-main>
+      <v-container class="fill-height">
+        <router-view />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import AppBar from './components/AppBar'
+export default {
+  name: 'App',
+  components: { AppBar },
+  data: () => ({
+    //
+  })
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+</script>

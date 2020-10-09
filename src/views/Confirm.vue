@@ -1,10 +1,26 @@
 <template>
-  <form class="confirm">
-    <h1>Enter confirm code</h1>
-    <input type="text" v-model="code" placeholder="Enter code" />
-    <div v-if="error">{{ error }}</div>
-    <button @click="confirm">Confirm</button>
-  </form>
+  <v-card class="mx-auto">
+    <v-card-title>
+      Confirm registration code
+    </v-card-title>
+    <v-card-text>
+      <v-text-field prepend-icon="mdi-at" type="text" name="email" v-model="email" placeholder="email" solo />
+      <v-text-field
+        prepend-icon="mdi-key"
+        :error-messages="error"
+        type="text"
+        name="code"
+        v-model="code"
+        placeholder="000000"
+        solo
+        label="Enter confirmation code"
+      />
+      <v-btn :loading="loading" @click="resend" text class="my-4">Resend registration code</v-btn>
+
+      <v-btn :loading="loading" @click="confirm" class="primary" block>Confirm</v-btn>
+
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -12,17 +28,42 @@ export default {
   name: 'Confirm',
   data() {
     return {
-      code: '085178',
-      error: ''
+      email: '',
+      code: '',
+      error: '',
+      loading: false
     }
+  },
+  mounted() {
+    this.email = this.$route.query.email || ''
   },
   methods: {
     confirm() {
       this.error = ''
+      this.loading = true
       this.$store
-        .dispatch('confirmRegistration', { email: this.$route.query.email, verificationCode: this.code })
-        .then(this.$router.push({ name: 'Signin', query: { email: this.$route.query.email } }))
+        .dispatch('confirmRegistration', {
+          email: this.email,
+          verificationCode: this.code
+        })
+        .then(
+          this.$router.push({
+            name: 'Signin',
+            query: { email: this.email }
+          })
+        )
         .catch(e => (this.error = e.message))
+        .finally(() => (this.loading = false))
+    },
+    resend() {
+      this.error = ''
+      this.loading = true
+      this.$store
+        .dispatch('resendConfirmationCode', {
+          email: this.email
+        })
+        .catch(e => (this.error = e.message))
+        .finally(() => (this.loading = false))
     }
   }
 }

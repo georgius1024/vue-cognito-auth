@@ -1,11 +1,22 @@
 <template>
-  <form class="signin">
-    <h1>Signin</h1>
-    <input type="email" v-model="email" placeholder="Enter email" />
-    <input type="password" v-model="password" placeholder="Enter password" />
-    <div v-if="error">{{ error }}</div>
-    <button @click="signin">Signin</button>
-  </form>
+  <v-card class="mx-auto">
+    <v-card-title>
+      Signin
+    </v-card-title>
+    <v-card-text>
+      <v-text-field
+        prepend-icon="mdi-at"
+        :error-messages="error"
+        type="text"
+        name="email"
+        v-model="email"
+        placeholder="email"
+        solo
+      />
+      <v-text-field prepend-icon="mdi-lock-reset" type="password" v-model="password" placeholder="password" solo />
+      <v-btn :loading="loading" @click="signin" class="primary" block>Sign in</v-btn>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -15,7 +26,8 @@ export default {
     return {
       email: '',
       password: '',
-      error: ''
+      error: '',
+      loading: false
     }
   },
   mounted() {
@@ -24,10 +36,15 @@ export default {
   methods: {
     signin() {
       this.error = ''
+      this.loading = true
       this.$store
-        .dispatch('authenticateUser', { email: this.email, password: this.password })
+        .dispatch('authenticateUser', {
+          email: this.email,
+          password: this.password
+        })
         .then(this.success)
         .catch(e => (this.error = e.message))
+        .finally(() => (this.loading = false))
     },
     success(response) {
       const {
@@ -39,28 +56,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.signin {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  input {
-    display: block;
-    padding: 12px;
-  }
-  button {
-    margin-top: 12px;
-    display: block;
-    padding: 6px;
-  }
-  .error {
-    background-color: yellow;
-    color: red;
-    padding: 6px;
-    border: 1px solid red;
-    text-align: center;
-  }
-}
-</style>

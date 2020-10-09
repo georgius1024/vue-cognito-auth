@@ -11,28 +11,34 @@
 
 <script>
 export default {
-  name: 'Reset',
+  name: "Reset",
   data() {
     return {
-      email: '',
-      password: '',
-      code: '',
-      error: ''
-    }
+      email: "",
+      password: "",
+      code: "",
+      error: ""
+    };
   },
   mounted() {
-    this.email = this.$route.query.email || ''
+    this.email = this.$route.query.email || "";
   },
   methods: {
     reset() {
-      this.error = ''
+      this.error = "";
       this.$store
-        .dispatch('confirmPassword', { email: this.email, newPassword: this.password, verificationCode: this.code })
-        .then(this.$router.push({ name: 'Signin', query: { email: this.email } }))
-        .catch(e => (this.error = e.message))
+        .dispatch("confirmPassword", {
+          email: this.email,
+          newPassword: this.password,
+          verificationCode: this.code
+        })
+        .then(
+          this.$router.push({ name: "Signin", query: { email: this.email } })
+        )
+        .catch(e => (this.error = e.message));
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

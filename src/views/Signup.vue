@@ -1,11 +1,22 @@
 <template>
-  <form class="signup">
-    <h1>Signup</h1>
-    <input type="email" v-model="email" placeholder="Enter email" />
-    <input type="password" v-model="password" placeholder="Enter password" />
-    <div v-if="error">{{ error }}</div>
-    <button @click="signup">Signup</button>
-  </form>
+  <v-card class="mx-auto">
+    <v-card-title>
+      Signup
+    </v-card-title>
+    <v-card-text>
+      <v-text-field
+        prepend-icon="mdi-at"
+        :error-messages="error"
+        type="text"
+        name="email"
+        v-model="email"
+        placeholder="email"
+        solo
+      />
+      <v-text-field prepend-icon="mdi-lock-reset" type="password" v-model="password" placeholder="password" solo />
+      <v-btn :loading="loading" @click="signup" class="primary" block>Sign up</v-btn>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -15,42 +26,23 @@ export default {
     return {
       email: '',
       password: '',
-      error: ''
+      error: '',
+      loading: false
     }
   },
   methods: {
     signup() {
       this.error = ''
+      this.loading = true
       this.$store
-        .dispatch('signUp', { email: this.email, password: this.password })
+        .dispatch('signUp', {
+          email: this.email,
+          password: this.password
+        })
         .then(this.$router.push({ name: 'Confirm', query: { email: this.email } }))
         .catch(e => (this.error = e.message))
+        .finally(() => (this.loading = false))
     }
   }
 }
 </script>
-
-<style lang="scss">
-.signup {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  input {
-    display: block;
-    padding: 12px;
-  }
-  button {
-    margin-top: 12px;
-    display: block;
-    padding: 6px;
-  }
-  .error {
-    background-color: yellow;
-    color: red;
-    padding: 6px;
-    border: 1px solid red;
-    text-align: center;
-  }
-}
-</style>
