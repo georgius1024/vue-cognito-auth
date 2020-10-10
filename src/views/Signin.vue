@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Signin',
   data() {
@@ -50,9 +51,19 @@ export default {
       const {
         idToken: { jwtToken }
       } = response
-      this.$router.push({ name: 'Home', query: { logged: jwtToken } })
-      localStorage.setItem('TOKEN', jwtToken)
-    }
+      this.setAuthorization(jwtToken)
+      this.request({
+        method: 'get',
+        url: 'subscriber'
+      })
+        .then(console.log)
+        .catch(console.error)
+        .finally(this.$router.push({ name: 'Home', query: { logged: jwtToken } }))
+
+      //localStorage.setItem('TOKEN', jwtToken)
+    },
+    ...mapMutations(['setAuthorization']),
+    ...mapActions(['request'])
   }
 }
 </script>
