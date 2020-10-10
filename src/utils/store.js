@@ -1,5 +1,5 @@
 import config from '../config'
-import { getStored, putStored, deleteStored } from '../lib/LocalStorage'
+import { getStored, putStored, deleteStored } from './LocalStorage'
 
 export function stored(key, defVal) {
   return getStored(config.appId + '-' + key, defVal)

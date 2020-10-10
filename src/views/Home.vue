@@ -3,9 +3,21 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-  name: "Home"
-};
+  name: 'Home',
+  mounted() {
+    this.request({
+      method: 'get',
+      url: 'subscriber'
+    })
+      .then(console.log)
+      .catch(console.error)
+  },
+  methods: {
+    ...mapActions(['request'])
+  }
+}
 </script>
 <style lang="scss">
 .home {

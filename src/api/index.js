@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { stored } from '../lib/Utils'
+import { stored } from '../utils/store'
 import config from '../config'
 
 function createAuthInterceptor(instance) {

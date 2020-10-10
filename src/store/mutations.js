@@ -14,5 +14,8 @@ export default {
     state.authorization = undefined
     destroy('user')
     destroy('authorization')
+  },
+  message: (state, message) => {
+    state.message = message
   }
 }

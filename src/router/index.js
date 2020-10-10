@@ -38,6 +38,11 @@ const routes = [
     path: '/reset',
     name: 'Reset',
     component: () => import(/* webpackChunkName: "about" */ '../views/Reset.vue')
+  },
+  {
+    path: '/signout',
+    name: 'Signout',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Signout.vue')
   }
 ]
 

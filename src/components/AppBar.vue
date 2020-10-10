@@ -14,16 +14,28 @@
     </div>
 
     <v-spacer></v-spacer>
-
-    <v-btn :to="{ name: 'Signup' }" text>SignUp</v-btn>
-    <v-btn :to="{ name: 'Signin' }" text>SignIn</v-btn>
-    <v-btn :to="{ name: 'Confirm' }" text>Confirm</v-btn>
-    <v-btn :to="{ name: 'Forgot' }" text>Forgot</v-btn>
+    <template v-if="isAuthenticated">
+      <v-btn :to="{ name: 'Logout' }" text>Logout</v-btn>
+    </template>
+    <template v-else>
+      <v-btn :to="{ name: 'Signup' }" text>SignUp</v-btn>
+      <v-btn :to="{ name: 'Signin' }" text>SignIn</v-btn>
+      <v-btn :to="{ name: 'Confirm' }" text>Confirm</v-btn>
+      <v-btn :to="{ name: 'Forgot' }" text>Forgot</v-btn>
+    </template>
   </v-app-bar>
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'AppBar',
+  props: {
+    isAuthenticated: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
 </script>
 
 <style></style>

@@ -48,6 +48,8 @@ export default {
         .finally(() => (this.loading = false))
     },
     success(response) {
+      console.log(response)
+      this.$store.dispatch('getUserSession').then(console.log)
       const {
         idToken: { jwtToken }
       } = response
@@ -59,8 +61,6 @@ export default {
         .then(console.log)
         .catch(console.error)
         .finally(this.$router.push({ name: 'Home', query: { logged: jwtToken } }))
-
-      //localStorage.setItem('TOKEN', jwtToken)
     },
     ...mapMutations(['setAuthorization']),
     ...mapActions(['request'])
