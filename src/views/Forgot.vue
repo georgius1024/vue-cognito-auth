@@ -1,10 +1,23 @@
 <template>
-  <form class="forgot">
-    <h1>Forgot</h1>
-    <input type="email" v-model="email" placeholder="Enter email" />
-    <div v-if="error">{{ error }}</div>
-    <button @click="forgot">Restore</button>
-  </form>
+  <v-card class="mx-auto" min-width="40vw">
+    <v-card-title>
+      Enter email to send reset password code
+    </v-card-title>
+    <v-card-text>
+      <v-text-field
+        prepend-icon="mdi-at"
+        :error-messages="error"
+        type="text"
+        name="email"
+        v-model="email"
+        placeholder="email"
+        solo
+      />
+    </v-card-text>
+    <v-card-actions>
+      <v-btn :loading="loading" @click="forgot" class="primary" block>Reset password</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -13,7 +26,8 @@ export default {
   data() {
     return {
       email: '',
-      error: ''
+      error: '',
+      loading: false
     }
   },
   methods: {
@@ -23,32 +37,10 @@ export default {
         .dispatch('forgotPassword', { email: this.email })
         .then(this.$router.push({ name: 'Reset', query: { email: this.email } }))
         .catch(e => (this.error = e.message))
+        .finally(() => {
+          this.loading = false
+        })
     }
   }
 }
 </script>
-
-<style lang="scss">
-.forgot {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  input {
-    display: block;
-    padding: 12px;
-  }
-  button {
-    margin-top: 12px;
-    display: block;
-    padding: 6px;
-  }
-  .error {
-    background-color: yellow;
-    color: red;
-    padding: 6px;
-    border: 1px solid red;
-    text-align: center;
-  }
-}
-</style>

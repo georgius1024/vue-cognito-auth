@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" min-width="40vw">
     <v-card-title>
       Signin
     </v-card-title>
@@ -13,9 +13,12 @@
         placeholder="email"
         solo
       />
-      <v-text-field prepend-icon="mdi-lock-reset" type="password" v-model="password" placeholder="password" solo />
-      <v-btn :loading="loading" @click="signin" class="primary" block>Sign in</v-btn>
+      <v-text-field prepend-icon="mdi-key" type="password" v-model="password" placeholder="password" solo />
+      <router-link :to="{ name: 'Forgot' }">Forgot password?</router-link>
     </v-card-text>
+    <v-card-actions>
+      <v-btn :loading="loading" @click="signin" class="primary" block>Sign in</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -48,8 +51,6 @@ export default {
         .finally(() => (this.loading = false))
     },
     success(response) {
-      console.log(response)
-      this.$store.dispatch('getUserSession').then(console.log)
       const {
         idToken: { jwtToken }
       } = response
@@ -58,9 +59,8 @@ export default {
         method: 'get',
         url: 'subscriber'
       })
-        .then(console.log)
         .catch(console.error)
-        .finally(this.$router.push({ name: 'Home', query: { logged: jwtToken } }))
+        .finally(this.$router.push({ name: 'Home' }))
     },
     ...mapMutations(['setAuthorization']),
     ...mapActions(['request'])

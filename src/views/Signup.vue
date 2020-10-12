@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" min-width="40vw">
     <v-card-title>
       Signup
     </v-card-title>
@@ -13,7 +13,7 @@
         placeholder="email"
         solo
       />
-      <v-text-field prepend-icon="mdi-lock-reset" type="password" v-model="password" placeholder="password" solo />
+      <v-text-field prepend-icon="mdi-key" type="password" v-model="password" placeholder="password" solo />
       <v-btn :loading="loading" @click="signup" class="primary" block>Sign up</v-btn>
     </v-card-text>
   </v-card>

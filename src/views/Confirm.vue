@@ -1,7 +1,7 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" min-width="40vw">
     <v-card-title>
-      Confirm registration code
+      Enter confirmation code
     </v-card-title>
     <v-card-text>
       <v-text-field prepend-icon="mdi-at" type="text" name="email" v-model="email" placeholder="email" solo />
@@ -15,11 +15,11 @@
         solo
         label="Enter confirmation code"
       />
-      <v-btn :loading="loading" @click="resend" text class="my-4">Resend registration code</v-btn>
-
-      <v-btn :loading="loading" @click="confirm" class="primary" block>Confirm</v-btn>
-
+      <a href="#" @click.prevent="resend" text class="my-4">Resend registration code</a>
     </v-card-text>
+    <v-card-actions>
+      <v-btn :loading="loading" @click="confirm" class="primary" block>Confirm</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -46,7 +46,7 @@ export default {
           email: this.email,
           verificationCode: this.code
         })
-        .then(
+        .then(() =>
           this.$router.push({
             name: 'Signin',
             query: { email: this.email }
