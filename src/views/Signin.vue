@@ -7,17 +7,32 @@
       <v-text-field
         prepend-icon="mdi-at"
         :error-messages="error"
-        type="text"
+        type="email"
         name="email"
         v-model="email"
-        placeholder="email"
-        solo
+        label="Your email"
+        outlined
       />
-      <v-text-field prepend-icon="mdi-key" type="password" v-model="password" placeholder="password" solo />
-      <router-link :to="{ name: 'Forgot' }">Forgot password?</router-link>
+      <v-text-field
+        prepend-icon="mdi-key"
+        type="password"
+        v-model="password"
+        label="Password"
+        outlined
+      />
+      <a
+        href="#"
+        @click.prevent="forgot"
+        class="my-4"
+        :class="{ disabled: !email }"
+      >
+        Forgot password?
+      </a>
     </v-card-text>
     <v-card-actions>
-      <v-btn :loading="loading" @click="signin" class="primary" block>Sign in</v-btn>
+      <v-btn large :loading="loading" @click="signin" class="primary" block
+        >Sign in</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -39,16 +54,20 @@ export default {
   },
   methods: {
     signin() {
-      this.error = ''
-      this.loading = true
-      this.$store
-        .dispatch('authenticateUser', {
-          email: this.email,
-          password: this.password
-        })
-        .then(this.success)
-        .catch(e => (this.error = e.message))
-        .finally(() => (this.loading = false))
+      if (this.email && this.password) {
+        this.error = ''
+        this.loading = true
+        this.$store
+          .dispatch('authenticateUser', {
+            email: this.email,
+            password: this.password
+          })
+          .then(this.success)
+          .catch(e => (this.error = e.message))
+          .finally(() => (this.loading = false))
+      } else {
+        this.error = 'Enter email and password'
+      }
     },
     success(response) {
       const {
@@ -62,8 +81,30 @@ export default {
         .catch(console.error)
         .finally(this.$router.push({ name: 'Home' }))
     },
+    forgot() {
+      if (this.email) {
+        this.error = ''
+        this.$store
+          .dispatch('forgotPassword', { email: this.email })
+          .then(
+            this.$router.push({ name: 'Reset', query: { email: this.email } })
+          )
+          .catch(e => (this.error = e.message))
+          .finally(() => {
+            this.loading = false
+          })
+      } else {
+        this.error = 'Enter email and password'
+      }
+    },
     ...mapMutations(['setAuthorization']),
     ...mapActions(['request'])
   }
 }
 </script>
+<style lang="scss">
+a.disabled {
+  color: #333;
+  cursor: not-allowed;
+}
+</style>

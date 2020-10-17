@@ -1,24 +1,40 @@
 <template>
   <v-card class="mx-auto" min-width="40vw">
     <v-card-title>
-      Enter confirmation code
+      Confirm email
     </v-card-title>
     <v-card-text>
-      <v-text-field prepend-icon="mdi-at" type="text" name="email" v-model="email" placeholder="email" solo />
       <v-text-field
-        prepend-icon="mdi-key"
+        prepend-icon="mdi-at"
         :error-messages="error"
+        type="email"
+        name="email"
+        v-model="email"
+        label="Your email"
+        outlined
+      />
+      <v-text-field
+        prepend-icon="mdi-lock-reset"
         type="text"
         name="code"
         v-model="code"
-        placeholder="000000"
-        solo
-        label="Enter confirmation code"
+        outlined
+        label="Your code"
+        hint="Enter confirmation code from message"
       />
-      <a href="#" @click.prevent="resend" text class="my-4">Resend registration code</a>
+      <a
+        href="#"
+        @click.prevent="resend"
+        class="my-4"
+        :class="{ disabled: !email }"
+      >
+        Resend registration code
+      </a>
     </v-card-text>
     <v-card-actions>
-      <v-btn :loading="loading" @click="confirm" class="primary" block>Confirm</v-btn>
+      <v-btn :loading="loading" @click="confirm" class="primary" block>
+        Confirm
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -56,40 +72,26 @@ export default {
         .finally(() => (this.loading = false))
     },
     resend() {
-      this.error = ''
-      this.loading = true
-      this.$store
-        .dispatch('resendConfirmationCode', {
-          email: this.email
-        })
-        .catch(e => (this.error = e.message))
-        .finally(() => (this.loading = false))
+      if (this.email) {
+        this.error = ''
+        this.loading = true
+        this.$store
+          .dispatch('resendConfirmationCode', {
+            email: this.email
+          })
+          .catch(e => (this.error = e.message))
+          .finally(() => (this.loading = false))
+      } else {
+        this.error = 'Enter email'
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-.confirm {
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  input {
-    display: block;
-    padding: 12px;
-  }
-  button {
-    margin-top: 12px;
-    display: block;
-    padding: 6px;
-  }
-  .error {
-    background-color: yellow;
-    color: red;
-    padding: 6px;
-    border: 1px solid red;
-    text-align: center;
-  }
+a.disabled {
+  color: #333;
+  cursor: not-allowed;
 }
 </style>

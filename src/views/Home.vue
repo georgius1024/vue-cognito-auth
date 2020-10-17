@@ -1,5 +1,8 @@
 <template>
+  <div>
   <h1>Home</h1>
+  <v-btn @click="$store.commit('error', '123')">123</v-btn>
+  </div>
 </template>
 
 <script>

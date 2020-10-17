@@ -4,9 +4,8 @@
       Set new password
     </v-card-title>
     <v-card-text>
-      <v-text-field prepend-icon="mdi-at" type="text" name="email" v-model="email" placeholder="email" solo />
       <v-text-field
-        prepend-icon="mdi-key"
+        prepend-icon="mdi-lock-reset"
         :error-messages="error"
         type="text"
         name="code"
@@ -15,10 +14,27 @@
         solo
         label="Enter verification code"
       />
-      <v-text-field prepend-icon="mdi-key" type="password" v-model="password" placeholder="password" solo />
+      <v-text-field
+        prepend-icon="mdi-at"
+        type="email"
+        name="email"
+        v-model="email"
+        placeholder="email"
+        solo
+      />
+      <v-text-field
+        prepend-icon="mdi-key"
+        type="password"
+        name="password"
+        v-model="password"
+        placeholder="new password"
+        solo
+      />
     </v-card-text>
     <v-card-actions>
-      <v-btn :loading="loading" @click="reset" class="primary" block>Set new password</v-btn>
+      <v-btn :loading="loading" @click="reset" class="primary" block
+        >Set new password</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -48,7 +64,9 @@ export default {
           newPassword: this.password,
           verificationCode: this.code
         })
-        .then(this.$router.push({ name: 'Signin', query: { email: this.email } }))
+        .then(
+          this.$router.push({ name: 'Signin', query: { email: this.email } })
+        )
         .catch(e => (this.error = e.message))
     }
   }

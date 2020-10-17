@@ -16,6 +16,9 @@ export default {
     destroy('authorization')
   },
   message: (state, message) => {
-    state.message = message
+    state.lastMessage = message
+  },
+  error: (state, error) => {
+    state.lastError = error
   }
 }
