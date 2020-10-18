@@ -63,7 +63,10 @@ export default {
             password: this.password
           })
           .then(this.success)
-          .catch(e => (this.error = e.message))
+          .catch(e => {
+            this.error = e.message
+            this.showError(this.error)
+          })
           .finally(() => (this.loading = false))
       } else {
         this.error = 'Enter email and password'
@@ -74,11 +77,15 @@ export default {
         idToken: { jwtToken }
       } = response
       this.setAuthorization(jwtToken)
+      this.showMessage('Password accepted')
       this.request({
         method: 'get',
         url: 'subscriber'
       })
-        .catch(console.error)
+        .catch(e => {
+          this.error = e.message
+          this.showError(this.error)
+        })
         .finally(this.$router.push({ name: 'Home' }))
     },
     forgot() {
@@ -86,18 +93,25 @@ export default {
         this.error = ''
         this.$store
           .dispatch('forgotPassword', { email: this.email })
-          .then(
+          .then(() => {
             this.$router.push({ name: 'Reset', query: { email: this.email } })
-          )
-          .catch(e => (this.error = e.message))
+            this.showMessage(
+              'We send confirmation code to your email. Please check your mailbox (and spam folder)'
+            )
+          })
+          .catch(e => {
+            this.error = e.message
+            this.showError(this.error)
+          })
           .finally(() => {
             this.loading = false
           })
       } else {
         this.error = 'Enter email and password'
+        this.showError(this.error)
       }
     },
-    ...mapMutations(['setAuthorization']),
+    ...mapMutations(['setAuthorization', 'showError', 'showMessage']),
     ...mapActions(['request'])
   }
 }

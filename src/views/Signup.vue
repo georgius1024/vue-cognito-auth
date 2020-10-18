@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name: 'Signup',
   data() {
@@ -51,15 +52,23 @@ export default {
             email: this.email,
             password: this.password
           })
-          .then(
+          .then(() => {
             this.$router.push({ name: 'Confirm', query: { email: this.email } })
-          )
-          .catch(e => (this.error = e.message))
+            this.showMessage(
+              'We send confirmation code to your email. Please check your mailbox (and spam folder)'
+            )
+          })
+          .catch(e => {
+            this.error = e.message
+            this.showError(e.message)
+
+          })
           .finally(() => (this.loading = false))
       } else {
         this.error = 'Enter email and password'
       }
-    }
+    },
+    ...mapMutations(['showMessage', 'showError'])
   }
 }
 </script>

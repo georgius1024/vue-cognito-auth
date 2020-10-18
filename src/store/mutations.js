@@ -15,10 +15,10 @@ export default {
     destroy('user')
     destroy('authorization')
   },
-  message: (state, message) => {
+  showMessage: (state, message) => {
     state.lastMessage = message
   },
-  error: (state, error) => {
+  showError: (state, error) => {
     state.lastError = error
   }
 }

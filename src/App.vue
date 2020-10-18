@@ -28,12 +28,11 @@ export default {
   },
   mounted() {
     this.$store.subscribe(mutation => {
-      if (mutation.type === 'error') {
-        console.log(mutation)
+      if (mutation.type === 'showError') {
         this.message = mutation.payload
         this.color = 'error'
       }
-      if (mutation.type === 'message') {
+      if (mutation.type === 'showMessage') {
         this.message = mutation.payload
         this.color = 'info'
       }

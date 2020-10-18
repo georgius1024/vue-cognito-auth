@@ -21,7 +21,6 @@
       <v-btn :to="{ name: 'Signup' }" text>SignUp</v-btn>
       <v-btn :to="{ name: 'Signin' }" text>SignIn</v-btn>
       <v-btn :to="{ name: 'Confirm' }" text>Confirm</v-btn>
-      <v-btn :to="{ name: 'Forgot' }" text>Forgot</v-btn>
     </template>
   </v-app-bar>
 </template>

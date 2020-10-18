@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name: 'Confirm',
   data() {
@@ -55,21 +56,29 @@ export default {
   },
   methods: {
     confirm() {
-      this.error = ''
-      this.loading = true
-      this.$store
-        .dispatch('confirmRegistration', {
-          email: this.email,
-          verificationCode: this.code
-        })
-        .then(() =>
-          this.$router.push({
-            name: 'Signin',
-            query: { email: this.email }
+      if (this.email && this.code) {
+        this.error = ''
+        this.loading = true
+        this.$store
+          .dispatch('confirmRegistration', {
+            email: this.email,
+            verificationCode: this.code
           })
-        )
-        .catch(e => (this.error = e.message))
-        .finally(() => (this.loading = false))
+          .then(() =>
+            this.$router.push({
+              name: 'Signin',
+              query: { email: this.email }
+            })
+          )
+          .catch(e => {
+            this.error = e.message
+            this.showError(this.error)
+          })
+          .finally(() => (this.loading = false))
+      } else {
+        this.error = 'Enter email and code'
+        this.showError(this.error)
+      }
     },
     resend() {
       if (this.email) {
@@ -83,15 +92,10 @@ export default {
           .finally(() => (this.loading = false))
       } else {
         this.error = 'Enter email'
+        this.showError(this.error)
       }
-    }
+    },
+    ...mapMutations(['showError', 'showMessage'])
   }
 }
 </script>
-
-<style lang="scss">
-a.disabled {
-  color: #333;
-  cursor: not-allowed;
-}
-</style>
