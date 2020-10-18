@@ -1,11 +1,10 @@
 <template>
-  <form>
+  <v-form value="valid" @input="emit">
     <v-text-field
-      prepend-icon="mdi-at"
       :error-messages="error"
       type="email"
       name="email"
-      v-model="email"
+      v-model="profile.email"
       label="Your email"
       outlined
     />
@@ -17,7 +16,7 @@
       outlined
       hint="At least 6 symbols, must contain uppercase, lowercase leters and digits"
     />
-  </form>
+  </v-form>
 </template>
 
 <script>
@@ -28,6 +27,27 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data() {
+    return {
+      profile: {},
+      errors: []
+    }
+  },
+  beforeMount() {
+    this.fetchDataFromProps()
+  },
+  beforeUpdate() {
+    this.fetchDataFromProps()
+  },
+  methods: {
+    fetchDataFromProps() {
+      this.profile = this.value || {}
+    },
+    emit() {
+      this.$emit(this.profile)
+    },
+    error
   }
 }
 </script>
