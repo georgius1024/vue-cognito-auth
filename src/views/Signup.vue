@@ -21,6 +21,9 @@
         outlined
         hint="At least 6 symbols, must contain upper- lower- case leters and digits"
       />
+      <router-link :to="{ name: 'Signin' }" class="my-4">
+        Already registered?
+      </router-link>
     </v-card-text>
     <v-card-actions>
       <v-btn large :loading="loading" @click="signup" class="primary" block>
@@ -61,7 +64,6 @@ export default {
           .catch(e => {
             this.error = e.message
             this.showError(e.message)
-
           })
           .finally(() => (this.loading = false))
       } else {

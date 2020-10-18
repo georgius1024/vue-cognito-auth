@@ -1,25 +1,38 @@
 <template>
-  <v-form value="valid" @input="emit">
+  <v-form v-model="valid" ref="form">
     <v-text-field
-      :error-messages="error"
-      type="email"
-      name="email"
-      v-model="profile.email"
-      label="Your email"
+      v-model="profile.phone"
+      type="phone"
+      name="phone"
+      label="Phone number"
       outlined
+      :rules="[validation.required, validation.phone]"
+      @change="input"
     />
     <v-text-field
-      prepend-icon="mdi-key"
-      type="password"
-      v-model="password"
-      label="Password"
+      v-model="profile.name"
+      type="text"
+      name="name"
+      label="Full name"
       outlined
-      hint="At least 6 symbols, must contain uppercase, lowercase leters and digits"
+      :rules="[validation.required, validation.min(6)]"
+      @change="input"
+    />
+    <v-text-field
+      v-model="profile.nick"
+      type="text"
+      name="nick"
+      label="Nickname"
+      outlined
+      :rules="[validation.required]"
+      @change="input"
     />
   </v-form>
 </template>
 
 <script>
+import validation from '../utils/Validation'
+
 export default {
   name: 'ProfileEditor',
   props: {
@@ -31,7 +44,9 @@ export default {
   data() {
     return {
       profile: {},
-      errors: []
+      errors: [],
+      valid: false,
+      validation
     }
   },
   beforeMount() {
@@ -42,12 +57,14 @@ export default {
   },
   methods: {
     fetchDataFromProps() {
-      this.profile = this.value || {}
+      this.profile = { ...this.value } || {}
+      this.valid = true
     },
-    emit() {
-      this.$emit(this.profile)
-    },
-    error
+    input() {
+      this.$emit('input', this.profile)
+      this.$refs.form.validate()
+      this.$emit('valid', this.valid)
+    }
   }
 }
 </script>

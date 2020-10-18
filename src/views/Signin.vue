@@ -30,9 +30,9 @@
       </a>
     </v-card-text>
     <v-card-actions>
-      <v-btn large :loading="loading" @click="signin" class="primary" block
-        >Sign in</v-btn
-      >
+      <v-btn large :loading="loading" @click="signin" class="primary" block>
+        Sign in
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -82,11 +82,14 @@ export default {
         method: 'get',
         url: 'subscriber'
       })
+        .then(this.setUser)
         .catch(e => {
-          this.error = e.message
-          this.showError(this.error)
+          if (e.response?.status !== 404) {
+            this.error = e.message
+            this.showError(this.error)
+          }
         })
-        .finally(this.$router.push({ name: 'Home' }))
+        //.finally(this.$router.push({ name: 'Home' }))
     },
     forgot() {
       if (this.email) {
@@ -111,7 +114,12 @@ export default {
         this.showError(this.error)
       }
     },
-    ...mapMutations(['setAuthorization', 'showError', 'showMessage']),
+    ...mapMutations([
+      'setAuthorization',
+      'showError',
+      'showMessage',
+      'setUser'
+    ]),
     ...mapActions(['request'])
   }
 }

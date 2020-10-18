@@ -1,19 +1,36 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '../store'
+
 Vue.use(VueRouter)
 
+const ifAuthenticated = (to, from, next) => {
+  store
+    .dispatch('checkAuthentication')
+    .then(() => {
+      if (!store.getters.isAuthenticated) {
+        return next('/signup')
+      } else if (!store.getters.user && to.name !== 'Profile') {
+        return next('/profile')
+      }
+      next()
+    })
+    .catch(error => next(error))
+}
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/about',
     name: 'About',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue')
+      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/signin',
@@ -37,14 +54,29 @@ const routes = [
     path: '/reset',
     name: 'Reset',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Reset.vue')
+      import(/* webpackChunkName: "about" */ '../views/Reset.vue'),
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/signout',
     name: 'Signout',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Signout.vue')
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Profile.vue'),
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: '*',
+    name: 'Error',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Error.vue'),
   }
+
 ]
 
 const router = new VueRouter({
@@ -52,5 +84,9 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.onError = error => {
+  router.push({ name: 'Error', params: error.message })
+}
 
 export default router

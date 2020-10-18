@@ -15,7 +15,7 @@
 
     <v-spacer></v-spacer>
     <template v-if="isAuthenticated">
-      <v-btn :to="{ name: 'Logout' }" text>Logout</v-btn>
+      <v-btn :to="{ name: 'Signout' }" text>Signout</v-btn>
     </template>
     <template v-else>
       <v-btn :to="{ name: 'Signup' }" text>SignUp</v-btn>
