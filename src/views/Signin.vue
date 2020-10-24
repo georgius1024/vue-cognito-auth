@@ -82,14 +82,16 @@ export default {
         method: 'get',
         url: 'subscriber'
       })
-        .then(this.setUser)
+        .then(user => {
+          this.setUser(user)
+        })
         .catch(e => {
           if (e.response?.status !== 404) {
             this.error = e.message
             this.showError(this.error)
           }
         })
-        //.finally(this.$router.push({ name: 'Home' }))
+        .finally(() => this.$router.push({ name: 'Home' }))
     },
     forgot() {
       if (this.email) {

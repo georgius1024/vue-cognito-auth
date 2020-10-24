@@ -1,21 +1,21 @@
 <template>
   <v-card class="mx-auto" min-width="40vw">
     <v-card-title>
-      Profile
+      {{ create ? 'Create profile' : 'Profile' }}
     </v-card-title>
     <v-card-text>
       <ProfileForm v-model="profile" />
     </v-card-text>
     <v-card-actions>
       <v-btn large :loading="loading" @click="update" class="primary" block>
-        Update
+        Save
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
 import ProfileForm from '../components/ProfileForm'
 export default {
   name: 'Profile',
@@ -23,6 +23,8 @@ export default {
   data() {
     return {
       profile: {
+        id: '',
+        email: '',
         name: '',
         phone: '',
         nick: ''
@@ -30,15 +32,50 @@ export default {
       loading: false
     }
   },
-  mounted() {
-    this.$store.dispatch('getUserAttributes').then(console.log)
+  computed: {
+    ...mapGetters(['userId', 'userEmail', 'user']),
+    create() {
+      return !this.user
+    }
+  },
+  beforeMount() {
+    for (let key in this.profile) {
+      this.profile[key] = ''
+    }
+    if (!this.create) {
+      this.request({
+        method: 'get',
+        url: 'subscriber'
+      })
+        .then(user => {
+          this.profile = { ...user }
+        })
+        .catch(this.showError)
+    } else {
+      this.$store.dispatch('getUserAttributes').then(() => {
+        this.profile.id = this.userId
+        this.profile.email = this.userEmail
+      })
+    }
   },
   methods: {
     update() {
       this.loading = true
-      setTimeout((this.loading = false), 1000)
+      this.request({
+        method: this.create ? 'post' : 'put',
+        data: this.profile,
+        url: 'subscriber'
+      })
+        .then(user => {
+          this.setUser(user)
+          this.showMessage('Profile saved')
+          this.$router.push({ name: 'Home' })
+        })
+        .catch(this.showError)
+        .finally(() => (this.loading = false))
     },
-    ...mapMutations(['showMessage', 'showError'])
+    ...mapMutations(['showMessage', 'showError', 'setUser']),
+    ...mapActions(['request'])
   }
 }
 </script>

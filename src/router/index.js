@@ -12,7 +12,7 @@ const ifAuthenticated = (to, from, next) => {
       if (!store.getters.isAuthenticated) {
         return next('/signup')
       } else if (!store.getters.user && to.name !== 'Profile') {
-        return next('/profile')
+        return next({ name: 'Profile' })
       }
       next()
     })
@@ -71,12 +71,18 @@ const routes = [
     beforeEnter: ifAuthenticated
   },
   {
-    path: '*',
+    path: '/error/:error',
     name: 'Error',
+    props: true,
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Error.vue'),
+      import(/* webpackChunkName: "about" */ '../views/Error.vue')
+  },
+  {
+    path: '*',
+    name: 'Error404',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Error.vue')
   }
-
 ]
 
 const router = new VueRouter({

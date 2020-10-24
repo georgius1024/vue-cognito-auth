@@ -7,7 +7,7 @@
       label="Phone number"
       outlined
       :rules="[validation.required, validation.phone]"
-      @change="input"
+      @input="input"
     />
     <v-text-field
       v-model="profile.name"
@@ -16,7 +16,7 @@
       label="Full name"
       outlined
       :rules="[validation.required, validation.min(6)]"
-      @change="input"
+      @input="input"
     />
     <v-text-field
       v-model="profile.nick"
@@ -25,7 +25,7 @@
       label="Nickname"
       outlined
       :rules="[validation.required]"
-      @change="input"
+      @input="input"
     />
   </v-form>
 </template>
